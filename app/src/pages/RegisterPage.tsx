@@ -1,4 +1,4 @@
-import { Form, Input, Button, Card, message } from "antd";
+import {Form, Input, Button, Card, message, Row, Col} from "antd";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
@@ -20,25 +20,43 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <Card title="Register">
-        <Form layout="vertical" onFinish={onFinish}>
-          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Email" name="email" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-            <Input.Password />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Register
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
+    <Row
+      justify="center"
+      align="middle"
+      style={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}
+    >
+      <Col>
+        <Card title="Register" style={{ width: 380 }}>
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter your name" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please enter your email" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Please enter your password" }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Col>
+    </Row>
   );
 }
