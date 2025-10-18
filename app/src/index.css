@@ -946,33 +946,21 @@ code {
 .qr-code-placeholder {
   background: white;
   border-radius: 10px;
-  padding: 16px;
+  padding: 8px;
   text-align: center;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
 }
 
-.qr-icon {
-  font-size: 32px;
-  color: #667eea;
-  margin-bottom: 4px;
-}
-
-.qr-text {
-  font-weight: 600;
-  color: #1a1a1a;
-  font-size: 12px;
-}
-
-.qr-subtext {
-  color: #666;
-  font-size: 10px;
+.qr-code-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .donation-note {

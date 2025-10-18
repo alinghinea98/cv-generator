@@ -80,7 +80,7 @@ const CVWizardPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<WizardFormData>>({});
   const [isStepValid, setIsStepValid] = useState(false);
-  const [showDonationModal, setShowDonationModal] = useState(true);
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   const steps = [
     {
@@ -146,47 +146,78 @@ const CVWizardPage: React.FC = () => {
   };
 
   const validateCurrentStep = (values: any) => {
+    let result = false;
     switch (currentStep) {
       case 0:
-        return validatePersonalInfo(values);
+        result = validatePersonalInfo(values);
+        break;
       case 1:
-        return validateExperience(values);
+        result = validateExperience(values);
+        break;
       case 2:
-        return validateEducation(values);
+        result = validateEducation(values);
+        break;
       case 3:
-        return validateSkills(values);
+        result = validateSkills(values);
+        break;
       case 4:
-        return true; // Review step is always valid
+        // For review step, validate all previous steps
+        const personalValid = validatePersonalInfo(values);
+        const experienceValid = validateExperience(values);
+        const educationValid = validateEducation(values);
+        const skillsValid = validateSkills(values);
+        result = personalValid && experienceValid && educationValid && skillsValid;
+        break;
       default:
-        return false;
+        result = false;
     }
+    return result;
   };
 
   // Check form validation on field changes
   const onFieldsChange = () => {
     const values = form.getFieldsValue();
-    const isValid = validateCurrentStep(values);
+    const allValues = { ...formData, ...values };
+    const isValid = validateCurrentStep(allValues);
     setIsStepValid(isValid);
   };
 
   // Initialize validation state when component mounts
   useEffect(() => {
     const values = form.getFieldsValue();
-    const isValid = validateCurrentStep(values);
+    const allValues = { ...formData, ...values };
+    const isValid = validateCurrentStep(allValues);
     setIsStepValid(isValid);
-  }, [currentStep]);
+  }, [currentStep, formData]);
+
+  // Special effect for review step to ensure validation is updated
+  useEffect(() => {
+    if (currentStep === 4) {
+      const values = form.getFieldsValue();
+      const allValues = { ...formData, ...values };
+      const personalValid = validatePersonalInfo(allValues);
+      const experienceValid = validateExperience(allValues);
+      const educationValid = validateEducation(allValues);
+      const skillsValid = validateSkills(allValues);
+      const isValid = personalValid && experienceValid && educationValid && skillsValid;
+      setIsStepValid(isValid);
+    }
+  }, [currentStep, formData]);
 
   const handleNext = () => {
     if (!isStepValid) return;
     
     form.validateFields().then(() => {
       const values = form.getFieldsValue();
-      setFormData({ ...formData, ...values });
+      const newFormData = { ...formData, ...values };
+      setFormData(newFormData);
       setCurrentStep(currentStep + 1);
-      // Re-validate the next step
+      
+      // Re-validate the next step with updated form data
       setTimeout(() => {
         const nextStepValues = form.getFieldsValue();
-        const nextStepValid = validateCurrentStep(nextStepValues);
+        const allValues = { ...newFormData, ...nextStepValues };
+        const nextStepValid = validateCurrentStep(allValues);
         setIsStepValid(nextStepValid);
       }, 100);
     }).catch(() => {
@@ -199,7 +230,8 @@ const CVWizardPage: React.FC = () => {
     // Re-validate the previous step
     setTimeout(() => {
       const prevStepValues = form.getFieldsValue();
-      const prevStepValid = validateCurrentStep(prevStepValues);
+      const allValues = { ...formData, ...prevStepValues };
+      const prevStepValid = validateCurrentStep(allValues);
       setIsStepValid(prevStepValid);
     }, 100);
   };
@@ -774,9 +806,11 @@ const CVWizardPage: React.FC = () => {
           <div className="donation-options">
             <div className="qr-code-section">
               <div className="qr-code-placeholder">
-                <QrcodeOutlined className="qr-icon" />
-                <Text className="qr-text">Scan QR Code</Text>
-                <Text className="qr-subtext">for donations</Text>
+                <img 
+                  src="/qr-code.png" 
+                  alt="QR Code for donations"
+                  className="qr-code-image"
+                />
               </div>
             </div>
             
@@ -880,7 +914,6 @@ const CVWizardPage: React.FC = () => {
                     type="primary"
                     size="large"
                     onClick={handleFinish}
-                    disabled={!isStepValid}
                     icon={<CheckOutlined />}
                     className="nav-button primary"
                   >
