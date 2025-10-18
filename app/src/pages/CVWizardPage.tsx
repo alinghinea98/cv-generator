@@ -26,9 +26,9 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
   CheckOutlined,
-  QrcodeOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { generateCVPDF, formatDateForDisplay, CVData } from "../utils/pdfGenerator";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -44,6 +44,7 @@ interface WizardFormData {
   linkedin: string;
   website: string;
   summary: string;
+  photo: string; // Base64 encoded photo
 
   // Experience
   experiences: Array<{
@@ -81,6 +82,7 @@ const CVWizardPage: React.FC = () => {
   const [formData, setFormData] = useState<Partial<WizardFormData>>({});
   const [isStepValid, setIsStepValid] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const steps = [
     {
@@ -248,12 +250,57 @@ const CVWizardPage: React.FC = () => {
     });
   };
 
-  const handleGenerateCV = () => {
+  const handleGenerateCV = async () => {
     setShowDonationModal(false);
-    console.log("CV Data:", formData);
-    message.success("CV generated successfully! 🎉");
-    // Here you would typically send the data to your backend
-    // For now, we'll just show a success message
+    setIsGeneratingPDF(true);
+    
+    try {
+      // Prepare the CV data
+      const cvData: CVData = {
+        fullName: formData.fullName || '',
+        email: formData.email || '',
+        phone: formData.phone || '',
+        location: formData.location || '',
+        linkedin: formData.linkedin,
+        website: formData.website,
+        summary: formData.summary || '',
+        photo: formData.photo,
+        experiences: (formData.experiences || []).map(exp => ({
+          company: exp.company || '',
+          position: exp.position || '',
+          startDate: formatDateForDisplay(exp.startDate),
+          endDate: formatDateForDisplay(exp.endDate),
+          current: exp.current || false,
+          description: exp.description || '',
+        })),
+        education: (formData.education || []).map(edu => ({
+          institution: edu.institution || '',
+          degree: edu.degree || '',
+          field: edu.field || '',
+          startDate: formatDateForDisplay(edu.startDate),
+          endDate: formatDateForDisplay(edu.endDate),
+          gpa: edu.gpa,
+        })),
+        skills: formData.skills || [],
+        languages: formData.languages || [],
+        certifications: formData.certifications || [],
+        interests: formData.interests,
+      };
+
+      // Generate and download the PDF
+      await generateCVPDF(cvData);
+      
+      message.success("CV generated and downloaded successfully! 🎉");
+      
+      // Optional: Reset the form or redirect
+      // navigate("/");
+      
+    } catch (error) {
+      console.error('Error generating CV:', error);
+      message.error("Failed to generate CV. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   const handleCancelDonation = () => {
@@ -269,6 +316,59 @@ const CVWizardPage: React.FC = () => {
       <Paragraph className="step-description">
         Let's start with your basic information. This will appear at the top of your CV.
       </Paragraph>
+
+      {/* Photo Upload Section */}
+      <Row gutter={[24, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24}>
+          <Form.Item name="photo" label="Profile Photo">
+            <Upload
+              accept="image/*"
+              listType="picture-card"
+              maxCount={1}
+              beforeUpload={(file) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  const result = e.target?.result as string;
+                  // Update form data with base64 image
+                  form.setFieldsValue({ photo: result });
+                };
+                reader.readAsDataURL(file);
+                return false; // Prevent upload
+              }}
+              onRemove={() => {
+                form.setFieldsValue({ photo: '' });
+              }}
+            >
+              {formData.photo ? null : (
+                <div>
+                  <UserOutlined style={{ fontSize: 24, color: '#667eea' }} />
+                  <div style={{ marginTop: 8, color: '#667eea' }}>
+                    Upload Photo
+                  </div>
+                </div>
+              )}
+            </Upload>
+            {formData.photo && (
+              <div style={{ textAlign: 'center', marginTop: 8 }}>
+                <img
+                  src={formData.photo}
+                  alt="Profile"
+                  style={{
+                    width: 100,
+                    height: 100,
+                    objectFit: 'cover',
+                    borderRadius: '50%',
+                    border: '2px solid #667eea'
+                  }}
+                />
+                <div style={{ marginTop: 4, fontSize: 12, color: '#666' }}>
+                  Profile photo preview
+                </div>
+              </div>
+            )}
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Row gutter={[24, 16]}>
         <Col xs={24} md={12}>
@@ -662,6 +762,24 @@ const CVWizardPage: React.FC = () => {
 
       <Card className="review-card">
         <Title level={4}>Personal Information</Title>
+        {formData.photo && (
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <img
+              src={formData.photo}
+              alt="Profile"
+              style={{
+                width: 80,
+                height: 80,
+                objectFit: 'cover',
+                borderRadius: '50%',
+                border: '2px solid #667eea'
+              }}
+            />
+            <div style={{ marginTop: 4, fontSize: 12, color: '#666' }}>
+              Profile Photo
+            </div>
+          </div>
+        )}
         <Paragraph>
           <Text strong>Name:</Text> {formData.fullName || "Not provided"}
         </Paragraph>
@@ -818,6 +936,9 @@ const CVWizardPage: React.FC = () => {
               <Text type="secondary">
                 💡 Your support helps us maintain and improve this free CV builder for everyone!
               </Text>
+              <Text type="secondary">
+                💡 We can create more templates so your CV looks even better!
+              </Text>
             </div>
           </div>
 
@@ -833,9 +954,11 @@ const CVWizardPage: React.FC = () => {
               type="primary"
               size="large"
               onClick={handleGenerateCV}
+              loading={isGeneratingPDF}
+              disabled={isGeneratingPDF}
               className="donation-generate-btn"
             >
-              Generate CV Now 🚀
+              {isGeneratingPDF ? 'Generating CV...' : 'Generate CV Now 🚀'}
             </Button>
           </div>
         </div>
