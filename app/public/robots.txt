@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+# Only disallow private/user-specific pages
+Disallow: /login
+Disallow: /register
+
+# Sitemap
+Sitemap: https://makemecv.org/sitemap.xml

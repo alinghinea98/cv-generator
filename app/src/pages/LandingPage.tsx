@@ -11,6 +11,7 @@ import {
   HeartOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import SEO from "../components/SEO";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -19,7 +20,14 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="modern-landing">
+    <>
+      <SEO
+        title="Make me CV - Free CV Builder & Resume Generator | Professional CV Creator"
+        description="Create professional CVs and resumes for free in minutes. Our CV builder helps you create ATS-friendly resumes that get you noticed by top employers. No sign-up required. Start building your perfect CV today!"
+        keywords="CV builder, resume builder, CV generator, resume generator, create CV, make CV, professional CV, CV template, resume template, free CV builder, online CV maker, ATS friendly CV"
+        url="https://makemecv.org/"
+      />
+      <div className="modern-landing">
       <Content className="hero-section">
         <div className="hero-background">
           <div className="gradient-orb orb-1"></div>
@@ -238,5 +246,6 @@ export default function LandingPage() {
         </div>
       </Footer>
     </div>
+    </>
   );
 }
