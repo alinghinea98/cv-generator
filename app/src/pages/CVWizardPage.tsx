@@ -1100,7 +1100,7 @@ const CVWizardPage: React.FC = () => {
       </Content>
 
       <Footer className="wizard-footer">
-        <Text>CVCraft ©{new Date().getFullYear()} | Professional CVs made simple</Text>
+        <Text>MakeMeCV ©{new Date().getFullYear()} | Professional CVs made simple</Text>
       </Footer>
       </div>
     </>

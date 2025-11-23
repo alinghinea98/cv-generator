@@ -40,7 +40,7 @@ export default function LandingPage() {
             <Col xs={24} md={12}>
               <div className="hero-text">
                 <Text className="hero-badge">
-                  <StarOutlined /> Trusted by professionals
+                  <StarOutlined className="animated-star" /> Trusted by professionals
                 </Text>
                 <Title level={1} className="hero-title">
                   Turn Your Story into a{" "}
@@ -225,8 +225,8 @@ export default function LandingPage() {
         <div className="footer-content">
           <div className="footer-brand">
             <div className="logo">
-              <FileTextOutlined className="logo-icon" />
-              <span className="logo-text">CVCraft</span>
+              <img src="/favicon.ico" alt="Logo" className="logo-icon" width={24} height={24}/>
+              <span className="logo-text">MakeMeCV</span>
             </div>
             <Text className="footer-tagline">
               Professional CVs made simple
@@ -239,7 +239,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <Text>CVCraft ©{new Date().getFullYear()} All rights reserved</Text>
+          <Text>MakeMeCV ©{new Date().getFullYear()} All rights reserved</Text>
         </div>
       </Footer>
     </div>
