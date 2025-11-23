@@ -29,6 +29,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { generateCVPDF, formatDateForDisplay, CVData } from "../utils/pdfGenerator";
+import dayjs from "dayjs";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -478,6 +479,7 @@ const CVWizardPage: React.FC = () => {
                       name={[name, "startDate"]}
                       label="Start Date"
                       rules={[{ required: true, message: "Please select start date" }]}
+                      dependencies={[[name, "endDate"]]}
                     >
                       <DatePicker size="large" style={{ width: "100%" }} />
                     </Form.Item>
@@ -487,6 +489,34 @@ const CVWizardPage: React.FC = () => {
                       {...restField}
                       name={[name, "endDate"]}
                       label="End Date"
+                      dependencies={[[name, "startDate"], [name, "current"]]}
+                      rules={[
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            const startDate = getFieldValue(["experiences", name, "startDate"]);
+                            const isCurrent = getFieldValue(["experiences", name, "current"]);
+                            
+                            // If it's a current position, end date is not required
+                            if (isCurrent === true) {
+                              return Promise.resolve();
+                            }
+                            
+                            // If no end date is provided and it's not current, it's required
+                            if (!value && isCurrent !== true) {
+                              return Promise.reject(new Error("Please select end date or mark as current position"));
+                            }
+                            
+                            // If both dates are provided, check if end date is after start date
+                            if (startDate && value) {
+                              if (dayjs(value).isBefore(dayjs(startDate), "day")) {
+                                return Promise.reject(new Error("End date cannot be before start date"));
+                              }
+                            }
+                            
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
                     >
                       <DatePicker size="large" style={{ width: "100%" }} />
                     </Form.Item>
@@ -615,6 +645,7 @@ const CVWizardPage: React.FC = () => {
                       name={[name, "startDate"]}
                       label="Start Date"
                       rules={[{ required: true, message: "Please select start date" }]}
+                      dependencies={[[name, "endDate"]]}
                     >
                       <DatePicker size="large" style={{ width: "100%" }} />
                     </Form.Item>
@@ -624,7 +655,24 @@ const CVWizardPage: React.FC = () => {
                       {...restField}
                       name={[name, "endDate"]}
                       label="End Date"
-                      rules={[{ required: true, message: "Please select end date" }]}
+                      dependencies={[[name, "startDate"]]}
+                      rules={[
+                        { required: true, message: "Please select end date" },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            const startDate = getFieldValue(["education", name, "startDate"]);
+                            
+                            // If both dates are provided, check if end date is after start date
+                            if (startDate && value) {
+                              if (dayjs(value).isBefore(dayjs(startDate), "day")) {
+                                return Promise.reject(new Error("End date cannot be before start date"));
+                              }
+                            }
+                            
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
                     >
                       <DatePicker size="large" style={{ width: "100%" }} />
                     </Form.Item>
