@@ -338,7 +338,7 @@ code {
 
 .card-2 {
   bottom: 40px;
-  left: -20px;
+  left: -10px;
   color: #ef4444;
 }
 
@@ -544,7 +544,7 @@ code {
   text-align: center;
   padding-top: 24px;
   border-top: 1px solid #333;
-  color: #666;
+  color: white!important;
   font-size: 14px;
 }
 
@@ -590,6 +590,9 @@ code {
 .wizard-logo .logo-icon {
   color: #667eea;
   font-size: 24px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .back-button {
@@ -647,9 +650,21 @@ code {
   border-color: #667eea !important;
 }
 
+.wizard-steps .ant-steps-item-process .ant-steps-item-icon .anticon {
+  color: white !important;
+}
+
 .wizard-steps .ant-steps-item-finish .ant-steps-item-icon {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
   border-color: #f093fb !important;
+}
+
+.wizard-steps .ant-steps-item-finish .ant-steps-item-icon .anticon {
+  color: white !important;
+}
+
+.wizard-steps .ant-steps-item-wait .ant-steps-item-icon .anticon {
+  color: #d1d5db !important;
 }
 
 .wizard-form-container {

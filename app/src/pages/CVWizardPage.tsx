@@ -469,7 +469,7 @@ const CVWizardPage: React.FC = () => {
                       label="Position"
                       rules={[{ required: true, message: "Please enter your position" }]}
                     >
-                      <Input size="large" placeholder="Software Engineer" />
+                      <Input size="large" placeholder="e.g., Marketing Manager, Teacher, Nurse" />
                     </Form.Item>
                   </Col>
                   <Col xs={24} md={8}>
@@ -570,7 +570,7 @@ const CVWizardPage: React.FC = () => {
                       label="Institution"
                       rules={[{ required: true, message: "Please enter institution name" }]}
                     >
-                      <Input size="large" placeholder="University of Technology" />
+                      <Input size="large" placeholder="e.g., State University, Community College" />
                     </Form.Item>
                   </Col>
                   <Col xs={24} md={12}>
@@ -597,7 +597,7 @@ const CVWizardPage: React.FC = () => {
                       label="Field of Study"
                       rules={[{ required: true, message: "Please enter field of study" }]}
                     >
-                      <Input size="large" placeholder="Computer Science" />
+                      <Input size="large" placeholder="e.g., Business Administration, Nursing, Education" />
                     </Form.Item>
                   </Col>
                   <Col xs={24} md={12}>
@@ -665,30 +665,30 @@ const CVWizardPage: React.FC = () => {
         Your Skills & Expertise
       </Title>
       <Paragraph className="step-description">
-        Add your technical skills, soft skills, languages, and certifications.
+        Add your skills, languages, and certifications.
       </Paragraph>
 
       <Row gutter={[24, 24]}>
         <Col xs={24} md={12}>
           <Form.Item
             name="skills"
-            label="Technical Skills"
+            label="Skills"
             rules={[{ required: true, message: "Please add at least one skill" }]}
           >
             <Select
               mode="tags"
               size="large"
-              placeholder="Add skills (e.g., JavaScript, Python, React)"
+              placeholder="Add skills (e.g., Communication, Project Management, Data Analysis)"
               style={{ width: "100%" }}
             >
-              <Option value="JavaScript">JavaScript</Option>
-              <Option value="Python">Python</Option>
-              <Option value="React">React</Option>
-              <Option value="Node.js">Node.js</Option>
-              <Option value="Java">Java</Option>
-              <Option value="SQL">SQL</Option>
-              <Option value="AWS">AWS</Option>
-              <Option value="Docker">Docker</Option>
+              <Option value="Communication">Communication</Option>
+              <Option value="Leadership">Leadership</Option>
+              <Option value="Project Management">Project Management</Option>
+              <Option value="Customer Service">Customer Service</Option>
+              <Option value="Data Analysis">Data Analysis</Option>
+              <Option value="Problem Solving">Problem Solving</Option>
+              <Option value="Teamwork">Teamwork</Option>
+              <Option value="Time Management">Time Management</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -713,13 +713,15 @@ const CVWizardPage: React.FC = () => {
             <Select
               mode="tags"
               size="large"
-              placeholder="Add certifications (e.g., AWS Certified)"
+              placeholder="Add certifications (e.g., PMP, CPA, Teaching License)"
               style={{ width: "100%" }}
             >
-              <Option value="AWS Certified">AWS Certified</Option>
-              <Option value="Google Cloud">Google Cloud</Option>
-              <Option value="Microsoft Azure">Microsoft Azure</Option>
-              <Option value="PMP">PMP</Option>
+              <Option value="PMP">PMP (Project Management)</Option>
+              <Option value="CPA">CPA (Certified Public Accountant)</Option>
+              <Option value="Teaching License">Teaching License</Option>
+              <Option value="First Aid">First Aid Certification</Option>
+              <Option value="Salesforce">Salesforce Certification</Option>
+              <Option value="Google Analytics">Google Analytics</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -851,7 +853,7 @@ const CVWizardPage: React.FC = () => {
 
         <Title level={4}>Skills</Title>
         <div style={{ marginBottom: 16 }}>
-          <Text strong>Technical Skills:</Text> {formData.skills?.join(", ") || "None added"}
+          <Text strong>Skills:</Text> {formData.skills?.join(", ") || "None added"}
         </div>
         <div style={{ marginBottom: 16 }}>
           <Text strong>Languages:</Text> {formData.languages?.join(", ") || "None added"}
@@ -967,8 +969,8 @@ const CVWizardPage: React.FC = () => {
       <div className="wizard-page">
       <Header className="wizard-header">
         <div className="wizard-logo">
-          <FileTextOutlined className="logo-icon" />
-          <span className="logo-text">CVCraft</span>
+          <img src="/favicon.ico" alt="Logo" className="logo-icon" />
+          <span className="logo-text">Make Me CV</span>
         </div>
         <Button
           type="text"
