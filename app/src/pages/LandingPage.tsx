@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Row, Col, Typography, Button, Card, Space, Statistic } from "antd";
+import { Layout, Row, Col, Typography, Button, Card, Space } from "antd";
 import {
   FileTextOutlined,
   TeamOutlined,
@@ -12,6 +12,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
+import AnimatedStatistic from "../components/AnimatedStatistic";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -125,35 +126,31 @@ export default function LandingPage() {
       <Content className="stats-section">
         <Row gutter={[32, 32]} justify="center">
           <Col xs={12} md={6}>
-            <Statistic
+            <AnimatedStatistic
               title="CVs Created"
               value={50000}
               suffix="+"
-              className="stat-item"
             />
           </Col>
           <Col xs={12} md={6}>
-            <Statistic
+            <AnimatedStatistic
               title="Success Rate"
               value={85}
               suffix="%"
-              className="stat-item"
             />
           </Col>
           <Col xs={12} md={6}>
-            <Statistic
+            <AnimatedStatistic
               title="Templates"
               value={25}
               suffix="+"
-              className="stat-item"
             />
           </Col>
           <Col xs={12} md={6}>
-            <Statistic
+            <AnimatedStatistic
               title="Countries"
               value={50}
               suffix="+"
-              className="stat-item"
             />
           </Col>
         </Row>
