@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import AnimatedStatistic from "../components/AnimatedStatistic";
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
 
 export default function LandingPage() {
@@ -23,9 +23,9 @@ export default function LandingPage() {
   return (
     <>
       <SEO
-        title="Make me CV - Free CV Builder & Resume Generator | Professional CV Creator"
-        description="Create professional CVs and resumes for free in minutes. Our CV builder helps you create ATS-friendly resumes that get you noticed by top employers. No sign-up required. Start building your perfect CV today!"
-        keywords="CV builder, resume builder, CV generator, resume generator, create CV, make CV, professional CV, CV template, resume template, free CV builder, online CV maker, ATS friendly CV"
+        title="Free CV Builder — Create a Professional CV Online | Make me CV"
+        description="Create a professional CV online in minutes with ATS-friendly templates and instant PDF download. Start building your CV now."
+        keywords="free CV builder, create CV online free, free resume generator, resume builder, CV generator, ATS friendly CV"
         url="https://makemecv.org/"
       />
       <div className="modern-landing">
@@ -40,7 +40,7 @@ export default function LandingPage() {
             <Col xs={24} md={12}>
               <div className="hero-text">
                 <Text className="hero-badge">
-                  <StarOutlined className="animated-star" /> Trusted by professionals
+                  <StarOutlined className="animated-star" /> Fast, professional, ATS-friendly
                 </Text>
                 <Title level={1} className="hero-title">
                   Turn Your Story into a{" "}
@@ -56,7 +56,7 @@ export default function LandingPage() {
                     type="primary"
                     size="large"
                     className="primary-cta"
-                    onClick={() => navigate("/wizard")}
+                    onClick={() => navigate("/free-cv-builder")}
                     icon={<RocketOutlined />}
                   >
                     Start Building Now
@@ -68,7 +68,7 @@ export default function LandingPage() {
                 <div className="trust-indicators">
                   <div className="trust-item">
                     <CheckCircleOutlined className="check-icon" />
-                    <Text>Free to start</Text>
+                    <Text>Instant PDF download</Text>
                   </div>
                   <div className="trust-item">
                     <CheckCircleOutlined className="check-icon" />
@@ -213,7 +213,7 @@ export default function LandingPage() {
             type="primary"
             size="large"
             className="cta-button"
-            onClick={() => navigate("/wizard")}
+            onClick={() => navigate("/free-cv-builder")}
             icon={<ArrowRightOutlined />}
           >
             Start Building Your CV
@@ -233,9 +233,9 @@ export default function LandingPage() {
             </Text>
           </div>
           <div className="footer-links">
-            <a href="#" className="footer-link">Privacy Policy</a>
-            <a href="#" className="footer-link">Terms of Service</a>
-            <a href="#" className="footer-link">Support</a>
+            <a href="https://makemecv.org/privacy-policy" className="footer-link">Privacy Policy</a>
+            <a href="https://makemecv.org/terms-of-service" className="footer-link">Terms of Service</a>
+            <a href="mailto:support@makemecv.org" className="footer-link">Support</a>
           </div>
         </div>
         <div className="footer-bottom">

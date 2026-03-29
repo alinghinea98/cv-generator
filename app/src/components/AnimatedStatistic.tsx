@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Statistic } from 'antd';
 
 interface AnimatedStatisticProps {
@@ -23,7 +23,7 @@ export default function AnimatedStatistic({
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  const animateValue = () => {
+  const animateValue = useCallback(() => {
     const startTime = Date.now();
     const startValue = 0;
 
@@ -46,7 +46,7 @@ export default function AnimatedStatistic({
     };
 
     requestAnimationFrame(animate);
-  };
+  }, [value, duration]);
 
   useEffect(() => {
     if (isVisible) return; // Don't set up observer if already visible
@@ -82,7 +82,7 @@ export default function AnimatedStatistic({
         observer.disconnect();
       }
     };
-  }, [title, isVisible]);
+  }, [title, isVisible, animateValue]);
 
   return (
     <div className={`stat-item stat-item-${title.replace(/\s+/g, '-').toLowerCase()} ${className}`}>

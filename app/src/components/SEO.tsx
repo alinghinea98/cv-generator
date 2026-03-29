@@ -14,9 +14,9 @@ interface SEOProps {
  * Usage: <SEO title="Page Title" description="Page description" />
  */
 export default function SEO({
-  title = 'Make me CV - Free CV Builder & Resume Generator',
-  description = 'Create professional CVs and resumes for free in minutes. Our CV builder helps you create ATS-friendly resumes that get you noticed.',
-  keywords = 'CV builder, resume builder, CV generator, resume generator, create CV, make CV, professional CV',
+  title = 'Free CV Builder — Create a Professional CV Online | Make me CV',
+  description = 'Create a professional CV online in minutes with ATS-friendly templates and instant PDF download.',
+  keywords = 'free CV builder, create CV online free, free resume generator, resume builder, CV generator, ATS friendly CV',
   image = 'https://makemecv.org/logo512.png',
   url = 'https://makemecv.org',
   type = 'website',

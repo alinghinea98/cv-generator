@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Layout,
   Steps,
@@ -28,6 +28,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import SEO from "../components/SEO";
 import { generateCVPDF, formatDateForDisplay, CVData } from "../utils/pdfGenerator";
 import dayjs from "dayjs";
 
@@ -148,7 +149,7 @@ const CVWizardPage: React.FC = () => {
     return !!(values.skills && values.skills.length > 0);
   };
 
-  const validateCurrentStep = (values: any) => {
+  const validateCurrentStep = useCallback((values: any) => {
     let result = false;
     switch (currentStep) {
       case 0:
@@ -164,7 +165,6 @@ const CVWizardPage: React.FC = () => {
         result = validateSkills(values);
         break;
       case 4:
-        // For review step, validate all previous steps
         const personalValid = validatePersonalInfo(values);
         const experienceValid = validateExperience(values);
         const educationValid = validateEducation(values);
@@ -175,7 +175,7 @@ const CVWizardPage: React.FC = () => {
         result = false;
     }
     return result;
-  };
+  }, [currentStep]);
 
   // Check form validation on field changes
   const onFieldsChange = () => {
@@ -185,27 +185,12 @@ const CVWizardPage: React.FC = () => {
     setIsStepValid(isValid);
   };
 
-  // Initialize validation state when component mounts
   useEffect(() => {
     const values = form.getFieldsValue();
     const allValues = { ...formData, ...values };
     const isValid = validateCurrentStep(allValues);
     setIsStepValid(isValid);
-  }, [currentStep, formData]);
-
-  // Special effect for review step to ensure validation is updated
-  useEffect(() => {
-    if (currentStep === 4) {
-      const values = form.getFieldsValue();
-      const allValues = { ...formData, ...values };
-      const personalValid = validatePersonalInfo(allValues);
-      const experienceValid = validateExperience(allValues);
-      const educationValid = validateEducation(allValues);
-      const skillsValid = validateSkills(allValues);
-      const isValid = personalValid && experienceValid && educationValid && skillsValid;
-      setIsStepValid(isValid);
-    }
-  }, [currentStep, formData]);
+  }, [currentStep, formData, form, validateCurrentStep]);
 
   const handleNext = () => {
     if (!isStepValid) return;
@@ -937,7 +922,12 @@ const CVWizardPage: React.FC = () => {
 
   return (
     <>
-      {/* Donation Modal */}
+      <SEO
+        title="Online CV Builder — Create Your CV in Minutes | Make me CV"
+        description="Create a professional CV online in a few steps. ATS-friendly layout, instant preview, and PDF download."
+        keywords="free CV builder, create CV online free, resume generator, CV builder, ATS friendly CV"
+        url="https://makemecv.org/free-cv-builder"
+      />
       <Modal
         open={showDonationModal}
         onCancel={handleCancelDonation}
@@ -1033,11 +1023,11 @@ const CVWizardPage: React.FC = () => {
       <Content className="wizard-content">
         <div className="wizard-container">
           <div className="wizard-progress">
-            <Title level={2} className="wizard-title">
-              Create Your Professional CV
+            <Title level={1} className="wizard-title">
+              Online CV builder
             </Title>
             <Paragraph className="wizard-subtitle">
-              Follow these simple steps to generate a professional CV that stands out
+              Follow these simple steps to generate a professional CV that stands out.
             </Paragraph>
             <Steps
               current={currentStep}

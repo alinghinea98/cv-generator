@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import LandingPage from "./pages/LandingPage";
@@ -11,7 +11,16 @@ export default function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/wizard" element={<CVWizardPage />} />
+      <Route path="/free-cv-builder" element={<CVWizardPage />} />
+      <Route path="/wizard" element={<Navigate to="/free-cv-builder" replace />} />
+      <Route
+        path="/create-cv-online-free"
+        element={<Navigate to="/free-cv-builder" replace />}
+      />
+      <Route
+        path="/free-resume-generator"
+        element={<Navigate to="/free-cv-builder" replace />}
+      />
     </Routes>
   );
 }

@@ -7,15 +7,15 @@
   <!-- Homepage -->
   <url>
     <loc>https://makemecv.org/</loc>
-    <lastmod>2024-01-01</lastmod>
+    <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- CV Wizard -->
   <url>
-    <loc>https://makemecv.org/wizard</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://makemecv.org/free-cv-builder</loc>
+    <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -23,7 +23,7 @@
   <!-- Login -->
   <url>
     <loc>https://makemecv.org/login</loc>
-    <lastmod>2024-01-01</lastmod>
+    <lastmod>2024-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -31,7 +31,7 @@
   <!-- Register -->
   <url>
     <loc>https://makemecv.org/register</loc>
-    <lastmod>2024-01-01</lastmod>
+    <lastmod>2024-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
