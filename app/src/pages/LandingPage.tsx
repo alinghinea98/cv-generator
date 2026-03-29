@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Row, Col, Typography, Button, Card, Space } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { Layout, Row, Col, Typography, Button, Card, Space, Modal, Spin, Alert } from "antd";
 import {
   FileTextOutlined,
   TeamOutlined,
@@ -13,12 +13,113 @@ import {
 import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import AnimatedStatistic from "../components/AnimatedStatistic";
+import { pdf } from "@react-pdf/renderer";
+import { createCVDocument } from "../components/CVTemplate";
 
 const { Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [isExamplesOpen, setIsExamplesOpen] = useState(false);
+  const [isExamplesLoading, setIsExamplesLoading] = useState(false);
+  const [examplesError, setExamplesError] = useState<string | null>(null);
+  const [examplePdfUrl, setExamplePdfUrl] = useState<string | null>(null);
+  const [examplePhotoDataUrl, setExamplePhotoDataUrl] = useState<string | null>(null);
+
+  const exampleData = useMemo(
+    () => ({
+      fullName: "Alex Morgan",
+      email: "alex.morgan@email.com",
+      phone: "+1 (555) 012-3456",
+      location: "London, UK",
+      linkedin: "linkedin.com/in/alexmorgan",
+      website: "alexmorgan.dev",
+      summary:
+        "Product manager with 6+ years of experience shipping customer‑focused features and improving conversion funnels. Strong stakeholder management, experimentation, and roadmap execution across cross‑functional teams.",
+      photo: undefined,
+      experiences: [
+        {
+          company: "NovaPay",
+          position: "Product Manager",
+          startDate: "2022",
+          endDate: "",
+          current: true,
+          description:
+            "Led checkout improvements that increased completed purchases by 12% through A/B testing. Shipped a new onboarding flow reducing time‑to‑first‑transaction by 28%. Partnered with design/engineering to deliver roadmap milestones on time for 3 consecutive quarters.",
+        },
+        {
+          company: "BrightApps",
+          position: "Associate PM",
+          startDate: "2019",
+          endDate: "2022",
+          current: false,
+          description:
+            "Improved retention by 9% by launching lifecycle messaging and improving feature discovery. Defined PRDs and success metrics for 15+ releases across iOS and Android.",
+        },
+      ],
+      education: [
+        {
+          institution: "University of Manchester",
+          degree: "BSc",
+          field: "Business & Information Systems",
+          startDate: "2015",
+          endDate: "2019",
+          gpa: "",
+        },
+      ],
+      skills: ["Roadmapping", "Analytics", "Experimentation", "SQL", "Figma", "Stakeholder management"],
+      languages: ["English"],
+      certifications: ["PSPO I"],
+      interests: "Running, travel, and volunteering at local tech meetups.",
+    }),
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      if (examplePdfUrl) URL.revokeObjectURL(examplePdfUrl);
+    };
+  }, [examplePdfUrl]);
+
+  const getPhotoDataUrl = async () => {
+    if (examplePhotoDataUrl) return examplePhotoDataUrl;
+    const res = await fetch("/1-intro-photo-final.jpg", { cache: "force-cache" });
+    if (!res.ok) throw new Error("Photo fetch failed");
+    const blob = await res.blob();
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = () => reject(new Error("Photo read failed"));
+      reader.readAsDataURL(blob);
+    });
+    setExamplePhotoDataUrl(dataUrl);
+    return dataUrl;
+  };
+
+  const openExamples = async () => {
+    setIsExamplesOpen(true);
+    setExamplesError(null);
+
+    if (examplePdfUrl) return;
+
+    setIsExamplesLoading(true);
+    try {
+      const photo = await getPhotoDataUrl();
+      const doc = createCVDocument({ ...exampleData, photo });
+      const blob = await pdf(doc).toBlob();
+      const url = URL.createObjectURL(blob);
+      setExamplePdfUrl(url);
+    } catch (e) {
+      setExamplesError("Could not load the example preview. Please try again.");
+    } finally {
+      setIsExamplesLoading(false);
+    }
+  };
+
+  const closeExamples = () => {
+    setIsExamplesOpen(false);
+  };
 
   return (
     <>
@@ -61,8 +162,12 @@ export default function LandingPage() {
                   >
                     Start Building Now
                   </Button>
-                  <Button size="large" disabled className="secondary-btn">
-                    View Examples
+                  <Button
+                    size="large"
+                    className="secondary-btn"
+                    onClick={openExamples}
+                  >
+                    View Example
                   </Button>
                 </Space>
                 <div className="trust-indicators">
@@ -243,6 +348,69 @@ export default function LandingPage() {
         </div>
       </Footer>
     </div>
+    <Modal
+      open={isExamplesOpen}
+      onCancel={closeExamples}
+      footer={null}
+      centered
+      width={920}
+      className="examples-modal"
+      title="Example CV (preview)"
+    >
+      <div className="examples-modal-body">
+        {examplesError && (
+          <Alert
+            type="error"
+            message={examplesError}
+            showIcon
+            style={{ marginBottom: 12 }}
+          />
+        )}
+
+        <div className="cv-example-preview" aria-label="Example CV preview">
+          {isExamplesLoading ? (
+            <div className="cv-example-loading">
+              <Spin size="large" />
+              <div className="cv-example-loading-text">Loading preview…</div>
+            </div>
+          ) : examplePdfUrl ? (
+            <iframe
+              className="cv-example-iframe"
+              src={examplePdfUrl}
+              title="Example generated CV"
+            />
+          ) : (
+            <div className="cv-example-loading">
+              <div className="cv-example-loading-text">Preview not available.</div>
+            </div>
+          )}
+        </div>
+
+        <div className="examples-modal-cta">
+          <Button type="primary" size="large" onClick={() => navigate("/free-cv-builder")}>
+            Create your CV
+          </Button>
+          {examplePdfUrl && (
+            <Button
+              size="large"
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = examplePdfUrl;
+                link.download = "Example_CV.pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+            >
+              Download example
+            </Button>
+          )}
+          <Button size="large" onClick={closeExamples}>
+            Close
+          </Button>
+        </div>
+      </div>
+    </Modal>
     </>
   );
 }

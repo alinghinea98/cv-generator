@@ -1522,6 +1522,60 @@ code {
   padding: 0 !important;
 }
 
+/* Examples Modal (Landing) */
+.examples-modal .ant-modal-content {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18) !important;
+  border: none !important;
+}
+
+.examples-modal .ant-modal-body {
+  padding: 0 !important;
+}
+
+.examples-modal-body {
+  background: #f8fafc;
+  padding: 18px;
+}
+
+.cv-example-preview {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  height: min(72vh, 720px);
+}
+
+.cv-example-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+.cv-example-loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  color: #475569;
+}
+
+.cv-example-loading-text {
+  font-weight: 600;
+}
+
+.examples-modal-cta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 14px;
+}
+
 .donation-modal-content {
   background: white;
   padding: 24px 20px;
